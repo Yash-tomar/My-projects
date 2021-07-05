@@ -1,0 +1,8 @@
+
+iverilog \
+/home/yash/projects/crc_nrzi/rtl/crca.sv\
+/home/yash/projects/crc_nrzi/rtl/nrzi.sv\
+/home/yash/projects/crc_nrzi/rtl/combined_nrzi_crca.sv\
+/home/yash/projects/crc_nrzi/tbench/tb.sv
+
+vvp ./a.out

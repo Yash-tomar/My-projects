@@ -1,0 +1,8 @@
+iverilog /home/yash/projects/nrzi/rtl/timescale.v    /home/yash/projects/nrzi/rtl/nrzi.sv    /home/yash/projects/nrzi/tbench/tb_nrzi.sv
+
+
+if [ ! -d "logs" ]; then
+	mkdir logs
+fi
+
+vvp ./a.out +trace
