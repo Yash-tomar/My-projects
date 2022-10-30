@@ -1,0 +1,8 @@
+The Advanced Peripheral Bus (APB) is meant for low power, low bandwidth peripherals. For example, an I2C controller where the serial protocol is low bandwidth compared to the main SoC system.
+
+It only supports single word transfers, and there is no multiple word ‘burst’ transfers. It also does not support ‘split transactions’, that is a request for data is completed, but the data is sent at some future time. A whole transfer is completed before another can be started, so there are no ‘overlapping’ transfers, and it can be big- or little-endian (the default).
+
+signals: -
+link
+https://media-exp1.licdn.com/dms/image/D4E12AQFDTeaXdQGM_A/article-inline_image-shrink_1500_2232/0/1662459782616?e=1669248000&v=beta&t=dWWPhaT4EPOQwOMyNCEvhAGgm3ppJM3eP76n92D-3sI
+

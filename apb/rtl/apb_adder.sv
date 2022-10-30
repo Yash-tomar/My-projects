@@ -1,9 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
-//Project :- APB master - adder 
-//	    
+//Project :- APB master - adder 	    
 //Engineer :- Yash Tomar
-//DOM      :- 17/09/21
+//Create on :- 17/09/21
+//Last modified on :-
 //Datasheet link :- https://web.eecs.umich.edu/~prabal/teaching/eecs373-f12/readings/ARM_AMBA3_APB.pdf
+//
+//Description:-
+//Adder - Read a value from slave at address 32'hD0AD00 
+//Increment that value 
+//Send that value back during the write operation to address 32'hD0AD00
 /////////////////////////////////////////////////////////////////////////////////
 
 module apb_adder(
@@ -28,23 +33,26 @@ typedef enum logic[1:0] {ST_IDLE,ST_SETUP,ST_ACCESS}apb_state;
 apb_state state_q; //current state
 apb_state next_state; //next state
 
-always_ff
+always_ff @(posedge pclk or negedge presetn)
 begin
 	if(!presetn)
 	begin
 		state_q <= ST_IDLE;
 		pwrite_q <= 1'b0
+		prdata_q <= 8'h00;
 	end
 	else
 	begin
 		state_q <= next_state;
 		pwrite_q <= next_pwrite;
+		prdata_q <= next_prdata;
 	end	
 end
 
 always_comb
 begin
 	next_pwrite = pwrite_q;
+	next_prdata = prdata_q;
 	case(state_q)
 		ST_IDLE: begin  // At tranfer move to setup state
 				if(add[0]) 
@@ -60,6 +68,8 @@ begin
 			  end
 		ST_ACCESS: begin
 				if(pready_i)
+					if(~pwrite_q)
+						next_prdata = prdata_i;
 					next_state = ST_IDLE;
 				else
 					next_state = ST_ACCESS;
@@ -72,4 +82,7 @@ assign Psel_o=(state_q == ST_SETUP)|(state_q==ST_ACCESS);
 assign penable_o = (state_q == ST_ACCESS); 
 assign Paddr_o= 32{(state_q == ST_SETUP | state_q == ST_ACCESS)}  & 32'hD0AD00;
 assign pwrite_o=pwrite_q;
+
+assign pwdata_o = 32{state_q == ST_ACCESS} & prdata_q;
+
 endmodule
