@@ -1,0 +1,95 @@
+#! /usr/local/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1227-g30c16902)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "/usr/local/lib/ivl/system.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/local/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/local/lib/ivl/va_math.vpi";
+:vpi_module "/usr/local/lib/ivl/v2009.vpi";
+S_0x56435c0ad950 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x56435c0e6220 .scope module, "LFSR_tb" "LFSR_tb" 3 5;
+ .timescale -9 -12;
+v0x56435c0f9ff0_0 .var "RSTn", 0 0;
+v0x56435c0fa090_0 .var "clk", 0 0;
+v0x56435c0fa160_0 .net "lfsr_o", 3 0, L_0x56435c0fa260;  1 drivers
+S_0x56435c0e63b0 .scope module, "I_DUT" "LFSR" 3 12, 4 3 0, S_0x56435c0e6220;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "RSTn";
+    .port_info 2 /OUTPUT 4 "lfsr_o";
+L_0x56435c0fa260 .functor BUFZ 4, v0x56435c0f9cd0_0, C4<0000>, C4<0000>, C4<0000>;
+L_0x56435c0fa560 .functor XOR 1, L_0x56435c0fa3f0, L_0x56435c0fa490, C4<0>, C4<0>;
+v0x56435c0abcf0_0 .net "RSTn", 0 0, v0x56435c0f9ff0_0;  1 drivers
+v0x56435c0f9860_0 .net *"_ivl_3", 2 0, L_0x56435c0fa2d0;  1 drivers
+v0x56435c0f9940_0 .net *"_ivl_5", 0 0, L_0x56435c0fa3f0;  1 drivers
+v0x56435c0f9a00_0 .net *"_ivl_7", 0 0, L_0x56435c0fa490;  1 drivers
+v0x56435c0f9ae0_0 .net *"_ivl_8", 0 0, L_0x56435c0fa560;  1 drivers
+v0x56435c0f9c10_0 .net "clk", 0 0, v0x56435c0fa090_0;  1 drivers
+v0x56435c0f9cd0_0 .var "lfsr_ff", 3 0;
+v0x56435c0f9db0_0 .net "lfsr_o", 3 0, L_0x56435c0fa260;  alias, 1 drivers
+v0x56435c0f9e90_0 .net "nxt_lfsr", 3 0, L_0x56435c0fa650;  1 drivers
+E_0x56435c0befb0/0 .event negedge, v0x56435c0abcf0_0;
+E_0x56435c0befb0/1 .event posedge, v0x56435c0f9c10_0;
+E_0x56435c0befb0 .event/or E_0x56435c0befb0/0, E_0x56435c0befb0/1;
+L_0x56435c0fa2d0 .part v0x56435c0f9cd0_0, 0, 3;
+L_0x56435c0fa3f0 .part v0x56435c0f9cd0_0, 3, 1;
+L_0x56435c0fa490 .part v0x56435c0f9cd0_0, 2, 1;
+L_0x56435c0fa650 .concat [ 1 3 0 0], L_0x56435c0fa560, L_0x56435c0fa2d0;
+    .scope S_0x56435c0e63b0;
+T_0 ;
+    %wait E_0x56435c0befb0;
+    %load/vec4 v0x56435c0abcf0_0;
+    %nor/r;
+    %flag_set/vec4 8;
+    %jmp/0xz  T_0.0, 8;
+    %pushi/vec4 15, 0, 4;
+    %assign/vec4 v0x56435c0f9cd0_0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v0x56435c0f9e90_0;
+    %assign/vec4 v0x56435c0f9cd0_0, 0;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_0x56435c0e6220;
+T_1 ;
+    %delay 5000, 0;
+    %load/vec4 v0x56435c0fa090_0;
+    %inv;
+    %store/vec4 v0x56435c0fa090_0, 0, 1;
+    %jmp T_1;
+    .thread T_1;
+    .scope S_0x56435c0e6220;
+T_2 ;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x56435c0fa090_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x56435c0f9ff0_0, 0, 1;
+    %delay 10000, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x56435c0f9ff0_0, 0, 1;
+    %delay 10000, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x56435c0f9ff0_0, 0, 1;
+    %delay 10000, 0;
+    %delay 200000, 0;
+    %vpi_call/w 3 23 "$finish" {0 0 0};
+    %end;
+    .thread T_2;
+    .scope S_0x56435c0e6220;
+T_3 ;
+    %vpi_call/w 3 27 "$monitor", "lfsr_o = %b", v0x56435c0fa160_0 {0 0 0};
+    %vpi_call/w 3 28 "$dumpfile", "dump.vcd" {0 0 0};
+    %vpi_call/w 3 29 "$dumpvars" {0 0 0};
+    %end;
+    .thread T_3;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "/home/yash/My-projects/LFSR/tbench/LFSR_tb.sv";
+    "/home/yash/My-projects/LFSR/rtl/LFSR.sv";
